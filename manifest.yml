@@ -1,0 +1,7 @@
+---
+applications:
+- name: cf-demo-react
+  command: npm start:cf
+  memory: 768M
+  instances: 1
+  random-route: true

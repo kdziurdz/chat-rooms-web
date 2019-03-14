@@ -13,7 +13,6 @@ switch (envMode) {
         baseURL = 'http://localhost:8080/'
     }
 }
-
 const axiosMain = axios.create({
     baseURL
 });

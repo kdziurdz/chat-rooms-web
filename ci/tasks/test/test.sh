@@ -1,4 +1,4 @@
 #!/bin/bash
-cd chat-rooms-repo
+cd pull-request
 npm install
 npm run test:ci

@@ -12,7 +12,7 @@ resources:
     webhook_token: 123abc
     source:
       repository: kdziurdz/chat-rooms-web
-      access_token: 7032af1db7b60784d18786c2666ada99cd34e4f1
+      access_token: c1f01d1d0f1a149ea63d9bce5285f415315e51c3
 
 jobs:
   - name: test
@@ -25,16 +25,7 @@ jobs:
           path: pull-request
           status: pending
       - task: unit-test
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source: {repository: alpine/git, tag: "latest"}
-          inputs:
-            - name: pull-request
-          run:
-            path: echo
-            args: [tests_passed]
+        file: pull-request/ci/tasks/test/test.yml
         on_failure:
           put: pull-request
           params:

@@ -1,7 +1,9 @@
 ---
 platform: linux
+inputs:
+  - name: test
 image_resource:
   type: docker-image
   source: {repository: busybox}
 run:
-  path: chat-rooms-repo/ci/tasks/test/test.sh
+  path: test/test.sh

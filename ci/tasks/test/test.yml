@@ -4,4 +4,4 @@ image_resource:
   type: docker-image
   source: {repository: busybox}
 run:
-  path: ./test.sh
+  path: chat-rooms-repo/ci/tasks/test/test.sh

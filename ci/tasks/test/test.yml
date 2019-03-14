@@ -6,4 +6,4 @@ image_resource:
   type: docker-image
   source: {repository: busybox}
 run:
-  path: test/test.sh
+  path: ./test/test.sh

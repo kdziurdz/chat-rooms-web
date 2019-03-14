@@ -1,0 +1,13 @@
+---
+resources:
+  - name: chat-rooms-repo
+    type: git
+    source:
+      uri: https://github.com/kdziurdz/chat-rooms-web
+      branch: master
+jobs:
+  - name: run-test
+    plan:
+      - get: chat-rooms-repo
+      - task: hello-world
+        file: chat-rooms-repo/ci/tasks/test/test.yml

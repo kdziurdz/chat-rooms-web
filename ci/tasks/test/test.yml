@@ -4,6 +4,8 @@ inputs:
   - name: chat-rooms-repo
 image_resource:
   type: docker-image
-  source: {repository: busybox}
+  source:
+    repository: node
+    tag: '10'
 run:
   path: chat-rooms-repo/ci/tasks/test/test.sh

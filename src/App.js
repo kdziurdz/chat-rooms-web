@@ -29,7 +29,7 @@ class App extends Component {
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
                     <p>
-                        Edit <code>src/App.js</code> and save to reload.
+                        Hello pvc
                     </p>
                     <button onClick={this.handleGetRooms}>get rooms</button>
                     <button onClick={this.handleShowEnvVars}>show env vars</button>

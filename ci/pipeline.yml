@@ -11,7 +11,7 @@ resources:
     check_every: 24h
     webhook_token: 123abc
     source:
-      repository: https://github.com/kdziurdz/chat-rooms-web
+      repository: kdziurdz/chat-rooms-web
       access_token: 7032af1db7b60784d18786c2666ada99cd34e4f1
 
 jobs:
@@ -25,16 +25,7 @@ jobs:
           path: pull-request
           status: pending
       - task: unit-test
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source: {repository: alpine/git, tag: "latest"}
-          inputs:
-            - name: pull-request
-          run:
-            path: echo
-            args: [tests_passed]
+        file: chat-rooms-repo/ci/tasks/test/test.yml
         on_failure:
           put: pull-request
           params:

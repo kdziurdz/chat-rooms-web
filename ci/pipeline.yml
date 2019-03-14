@@ -25,7 +25,16 @@ jobs:
           path: pull-request
           status: pending
       - task: unit-test
-        file: chat-rooms-repo/ci/tasks/test/test.yml
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: {repository: alpine/git, tag: "latest"}
+          inputs:
+            - name: pull-request
+          run:
+            path: echo
+            args: [tests_passed]
         on_failure:
           put: pull-request
           params:

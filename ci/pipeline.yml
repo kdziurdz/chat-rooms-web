@@ -12,7 +12,7 @@ resources:
     webhook_token: 123abc
     source:
       repository: kdziurdz/chat-rooms-web
-      access_token: c1f01d1d0f1a149ea63d9bce5285f415315e51c3
+      access_token: 51471888d185db975a695851f664fc0aa6837a96
 
 jobs:
   - name: test

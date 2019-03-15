@@ -15,19 +15,18 @@ resources:
       organization: sample-service
       space: development
       skip_cert_check: true
-
-  jobs:
-    - name: deploy-app
-      public: true
-      serial: true
-      plan:
-        - get: app
-          trigger: true
-        - task: unit-test
-          file: app/ci/tasks/test/test.yml
-        - task: build
-          file: app/ci/tasks/build/build.yml
-        - put: deploy-web-app
-          params:
-            manifest: app/manifest.yml
-            path: app
+jobs:
+  - name: deploy-app
+    public: true
+    serial: true
+    plan:
+      - get: app
+        trigger: true
+      - task: unit-test
+        file: app/ci/tasks/test/test.yml
+      - task: build
+        file: app/ci/tasks/build/build.yml
+      - put: deploy-web-app
+        params:
+          manifest: app/manifest.yml
+          path: app

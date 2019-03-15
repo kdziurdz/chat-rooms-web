@@ -1,4 +1,4 @@
 #!/bin/bash
-cd pull-request
+cd app
 npm install
 npm run test:ci

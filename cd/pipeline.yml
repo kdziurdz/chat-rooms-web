@@ -23,9 +23,9 @@ jobs:
       - get: app
         trigger: true
       - task: unit-test
-        file: app/ci/tasks/test/test.yml
+        file: app/cd/tasks/test/test.yml
       - task: build
-        file: app/ci/tasks/build/build.yml
+        file: app/cd/tasks/build/build.yml
       - put: deploy-web-app
         params:
           manifest: app/manifest.yml

@@ -8,4 +8,4 @@ image_resource:
     repository: node
     tag: '10'
 run:
-  path: app/ci/tasks/build/build.sh
+  path: app/cd/tasks/build/build.sh

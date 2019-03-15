@@ -4,7 +4,6 @@ import './App.css';
 import axiosMain from "./lib/network/axiosMain";
 
 class App extends Component {
-
     handleGetRooms = () => {
         console.log('get rooms')
         axiosMain.get('/api/1/rooms/')

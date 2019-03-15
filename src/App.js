@@ -18,7 +18,7 @@ class App extends Component {
     };
 
     handleShowEnvVars = () => {
-        console.log('handleShowEnvVars')
+        console.log('handleShowEnvVars');
         console.log(process.env);
     };
 

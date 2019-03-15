@@ -5,7 +5,7 @@ const envMode = process.env.NODE_ENV;
 let baseURL;
 
 switch (envMode) {
-    case 'development': { // production
+    case 'production': {
         baseURL = 'https://samplespring.cfapps.io';
         break;
     }

@@ -15,6 +15,7 @@ resources:
       organization: sample-service
       space: development
       skip_cert_check: true
+
 jobs:
   - name: deploy-app
     public: true
@@ -26,5 +27,4 @@ jobs:
         file: app/cd/tasks/build/build.yml
       - put: deploy-web-app
         params:
-          manifest: manifest.yml
-          path: build
+          manifest: build/manifest.yml

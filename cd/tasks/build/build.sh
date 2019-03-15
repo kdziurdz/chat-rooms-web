@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/bin/bash -ex
+
+cp -R app/* build/
 pwd
 ls
-cd app
+cd build
 pwd
 ls
 npm install
 npm run build
 cp Staticfile build/
-cp manifest.yml build/
+

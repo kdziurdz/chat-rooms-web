@@ -6,4 +6,4 @@ pwd
 ls
 npm install
 npm run build
-cp app/Staticfile app/build/
+cp Staticfile build/

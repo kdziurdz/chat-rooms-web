@@ -22,8 +22,6 @@ jobs:
     plan:
       - get: app
         trigger: true
-      - task: unit-test
-        file: app/cd/tasks/test/test.yml
       - task: build
         file: app/cd/tasks/build/build.yml
       - put: deploy-web-app

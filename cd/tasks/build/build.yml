@@ -3,7 +3,8 @@ platform: linux
 inputs:
   - name: app
 outputs:
-  - name: app
+  - name: app-builded
+  - path: app
 image_resource:
   type: docker-image
   source:

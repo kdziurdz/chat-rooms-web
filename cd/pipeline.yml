@@ -26,5 +26,5 @@ jobs:
         file: app/cd/tasks/build/build.yml
       - put: deploy-web-app
         params:
-          manifest: app/manifest.yml
-          path: app-builded
+          manifest: build/manifest.yml
+          path: build

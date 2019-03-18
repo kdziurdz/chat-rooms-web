@@ -6,7 +6,7 @@ resource_types:
       repository: teliaoss/github-pr-resource
 
 resources:
-  - name: pull-request
+  - name: app
     type: pull-request
     check_every: 24h
     webhook_token: 123abc
@@ -17,21 +17,21 @@ resources:
 jobs:
   - name: test
     plan:
-      - get: pull-request
+      - get: app
         trigger: true
         version: every
-      - put: pull-request
+      - put: app
         params:
-          path: pull-request
+          path: app
           status: pending
       - task: unit-test
-        file: pull-request/ci/tasks/test/test.yml
+        file: app/ci-cd/tasks/test/test.yml
         on_failure:
-          put: pull-request
+          put: app
           params:
-            path: pull-request
+            path: app
             status: failure
-      - put: pull-request
+      - put: app
         params:
-          path: pull-request
+          path: app
           status: success

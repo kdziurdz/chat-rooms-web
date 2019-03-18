@@ -2,12 +2,10 @@
 platform: linux
 inputs:
   - name: app
-outputs:
-  - name: build
 image_resource:
   type: docker-image
   source:
     repository: node
     tag: '10'
 run:
-  path: app/cd/tasks/build/build.sh
+  path: pull-request/ci-cd/tasks/test/test.sh

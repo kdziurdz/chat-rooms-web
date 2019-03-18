@@ -24,7 +24,7 @@ jobs:
       - get: app
         trigger: true
       - task: build
-        file: app/cd/tasks/build/build.yml
+        file: app/ci-cd/tasks/build/build.yml
       - put: deploy-web-app
         params:
           manifest: build/manifest.yml

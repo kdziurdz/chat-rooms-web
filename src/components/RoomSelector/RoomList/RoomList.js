@@ -1,40 +1,62 @@
-import React from 'react';
-import axiosMain from "../../../lib/network/axiosMain";
+import React, {Component} from 'react';
 import {ListGroup} from "react-bootstrap";
+import {connect} from 'react-redux'
+import {fetchRooms} from "../../../actions/room/fetchRoom";
 
-function RoomList() {
+class RoomList extends Component {
+    render() {
 
-    const handleGetRooms = () => {
-        console.log('get rooms');
-        axiosMain.get('/api/1/rooms/')
-            .then(function (response) {
-                // handle success
-                console.log(response);
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
-    };
+        const handleGetRooms = () => {
+            this.props.fetchRooms();
 
-    const handleShowEnvVars = () => {
-        console.log('handleShowEnvVars');
-        console.log(process.env);
-    };
+            // console.log('get rooms');
+            // axiosMain.get('/api/1/rooms/')
+            //     .then(function (response) {
+            //         // handle success
+            //         console.log(response);
+            //     })
+            //     .catch(function (error) {
+            //         // handle error
+            //         console.log(error);
+            //     })
+        };
 
-    return (
-        <ListGroup>
-            <ListGroup.Item>
-                <button onClick={handleGetRooms}>get rooms</button>
-            </ListGroup.Item>
-            <ListGroup.Item>
-                <button onClick={handleShowEnvVars}>show env vars</button>
-            </ListGroup.Item>
-            <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-            <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-            <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-        </ListGroup>
-    );
+        const handleShowEnvVars = () => {
+            console.log('handleShowEnvVars');
+            console.log(process.env);
+        };
+
+        const {rooms} = this.props;
+        return (
+            <ListGroup>
+                <ListGroup.Item>
+                    <button onClick={handleGetRooms}>get rooms</button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                    <button onClick={handleShowEnvVars}>show env vars</button>
+                </ListGroup.Item>
+                {rooms.map(room => (
+                    <ListGroup.Item>room</ListGroup.Item>
+                ))}
+                <ListGroup.Item>OSTATNI</ListGroup.Item>
+            </ListGroup>
+        );
+    }
 }
 
-export default RoomList;
+const mapStateToProps = state => {
+    return {
+        rooms: state.rooms
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchRooms: () => dispatch(fetchRooms())
+    }
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RoomList);

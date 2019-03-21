@@ -8,17 +8,6 @@ class RoomList extends Component {
 
         const handleGetRooms = () => {
             this.props.fetchRooms();
-
-            // console.log('get rooms');
-            // axiosMain.get('/api/1/rooms/')
-            //     .then(function (response) {
-            //         // handle success
-            //         console.log(response);
-            //     })
-            //     .catch(function (error) {
-            //         // handle error
-            //         console.log(error);
-            //     })
         };
 
         const handleShowEnvVars = () => {
@@ -36,7 +25,7 @@ class RoomList extends Component {
                     <button onClick={handleShowEnvVars}>show env vars</button>
                 </ListGroup.Item>
                 {rooms.map(room => (
-                    <ListGroup.Item>room</ListGroup.Item>
+                    <ListGroup.Item key={room.id}>{room.name}</ListGroup.Item> // TODO ID!
                 ))}
                 <ListGroup.Item>OSTATNI</ListGroup.Item>
             </ListGroup>

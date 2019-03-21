@@ -1,18 +1,17 @@
-import { put, takeEvery } from 'redux-saga/effects'
-export const FETCH_ROOMS = 'FETCH_ROOMS';
-export const FETCHED = 'FETCHED';
+import {put, takeEvery} from 'redux-saga/effects'
+import {FETCH_ROOMS} from "../../actions/room/fetchRoom";
+import axiosMain from '../../lib/network/axiosMain'
 
-const delay = (ms) => new Promise(res => setTimeout(res, ms))
+export const ROOMS_FETCHED = 'ROOMS_FETCHED';
 
-export function fetchRooms() {
-    console.log('AKCJA!', {type: FETCH_ROOMS, payload: ['room1', 'room2']})
-    return {type: FETCH_ROOMS, payload: ['room1', 'room2']}
+function getRooms() {
+    return axiosMain.get('/api/1/rooms/');
 }
 
 export function* fetchRoomsAsync(value) {
     console.log('fetchRoomsAsync', value);
-    yield delay(1000);
-    yield put({ type: FETCHED,  payload: ['YELDED1', 'YELDED2', 'YELDED3']})
+    const rooms = yield getRooms();
+    yield put({type: ROOMS_FETCHED, payload: rooms.data})
 }
 
 export function* watchFetchRoomsAsync() {

@@ -3,6 +3,7 @@ import {Card, ListGroup} from "react-bootstrap";
 import {connect} from 'react-redux'
 import {fetchRooms} from "../../../actions/room/fetchRoom";
 import JoinRoomModal from "../../JoinRoomModal/JoinRoomModal";
+import PropTypes from 'prop-types';
 
 class RoomList extends Component {
     constructor(props) {
@@ -22,7 +23,11 @@ class RoomList extends Component {
     };
 
     closeModal = () => {
-        this.setState({showJoinRoomModal: false});
+        this.setState({showJoinRoomModal: false, selectedRoom: null});
+    };
+    handleConnectionEstablished = (connection) => {
+        this.props.handleConnectionEstablished(connection);
+        this.closeModal();
     };
 
     render() {
@@ -39,7 +44,10 @@ class RoomList extends Component {
                     ))}
                 </ListGroup>
                 {showJoinRoomModal && selectedRoom && (
-                    <JoinRoomModal onClose={this.closeModal} room={selectedRoom}/>
+                    <JoinRoomModal
+                        onConnectionEstablished={this.handleConnectionEstablished}
+                        onClose={this.closeModal}
+                        room={selectedRoom}/>
                 )}
             </Card>
         );
@@ -56,6 +64,10 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchRooms: () => dispatch(fetchRooms())
     }
+};
+
+RoomList.propTypes = {
+    handleConnectionEstablished: PropTypes.func.isRequired
 };
 
 export default connect(

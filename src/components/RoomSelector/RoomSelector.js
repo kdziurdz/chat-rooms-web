@@ -1,29 +1,35 @@
-import React from 'react';
+import React, {Component} from 'react';
 import RoomSearch from "./RoomSearch/RoomSearch";
 import RoomList from "./RoomList/RoomList";
 import RoomCreator from "./RoomCreator/RoomCreator";
 import './RoomSelector.scss'
-import {Col, Row} from "react-bootstrap";
+import {connect} from "react-redux";
+import {storeRoomConnection} from "../../actions/room/storeRoomConnection";
 
-function RoomSelector() {
-    return (
-        <React.Fragment>
-            <Row>
-                <Col>
-                    <RoomSearch/>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <RoomList/>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <RoomCreator/>
-                </Col>
-            </Row>
-        </React.Fragment>
-    );
+class RoomSelector extends Component {
+
+    handleConnectionEstablished = (connection) => {
+        this.props.storeRoomConnection(connection)
+    };
+
+    render() {
+        return (
+            <React.Fragment>
+                <RoomSearch/>
+                <RoomList handleConnectionEstablished={this.handleConnectionEstablished}/>
+                <RoomCreator/>
+            </React.Fragment>
+        );
+    }
 }
-export default RoomSelector;
+
+const mapDispatchToProps = dispatch => {
+    return {
+        storeRoomConnection: (connection) => dispatch(storeRoomConnection(connection))
+    }
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(RoomSelector);

@@ -3,6 +3,7 @@ import {Button, Col, Form, Modal} from "react-bootstrap";
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import PropTypes from "prop-types";
+import ConnectionFactory from "../../lib/RoomConnection/ConnectionFactory";
 
 const schema = yup.object({
     name: yup.string().required()
@@ -12,7 +13,11 @@ const schema = yup.object({
 class JoinRoomModal extends Component {
 
     handleSubmit = (values) => {
-        console.log('handleSubmit', values)
+        const {room} = this.props;
+        ConnectionFactory.connect(room, values.name)
+            .then((connection) => {
+                this.props.onConnectionEstablished(connection)
+            });
     };
 
     render() {
@@ -94,7 +99,8 @@ JoinRoomModal.propTypes = {
         hasPassword: PropTypes.bool.isRequired,
         id: PropTypes.string.isRequired
     }),
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    onConnectionEstablished: PropTypes.func.isRequired
 };
 
 export default JoinRoomModal

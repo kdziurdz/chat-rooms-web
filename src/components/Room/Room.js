@@ -1,39 +1,94 @@
-import React from 'react';
-import {Button, ButtonToolbar, Card, Col, Form, FormControl, Navbar, Row} from "react-bootstrap";
+import React, {Component} from 'react';
+import {Card} from "react-bootstrap";
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {clearRoomConnection} from "../../actions/room/storeRoomConnection";
+import RoomHeader from "./RoomHeader/RoomHeader";
+import Messages from "./Messages/Messages";
+import MessageWriter from "./MessageWriter/MessageWriter";
 
-function Room() {
-    return (
-        <React.Fragment>
-            <Navbar bg="light">
-                <Navbar.Brand href="#home">roomName - you've joined as userName</Navbar.Brand>
-                <Navbar.Toggle/>
-                <Navbar.Collapse className="justify-content-end">
-                    <ButtonToolbar>
-                        <div>&nbsp;</div>
-                        <Button variant="primary">History</Button>
-                        <div>&nbsp;</div>
-                        <Button variant="secondary">Leave</Button>
-                    </ButtonToolbar>
-                </Navbar.Collapse>
-            </Navbar>
-            <Row>
-                <Col>
+class Room extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: []
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const {roomConnection} = this.props;
+        if (prevProps.roomConnection && !roomConnection) {
+            this.onMessage.unsubscribe();
+            this.setState({messages: []})
+        } else if (!prevProps.roomConnection && roomConnection) {
+            this.onMessage = roomConnection.onMessage.subscribe(this.onMessageReceived)
+        }
+    }
+
+    onMessageReceived = (message) => {
+        this.setState((prevState) => ({
+            messages: [...prevState.messages, message]
+        }))
+    };
+
+
+    handleRoomLeave = () => {
+        const {roomConnection, clearRoomConnection} = this.props;
+        roomConnection.disconnect();
+        clearRoomConnection();
+    };
+    handleShowHistory = () => {
+        console.log('handleShowHistory')
+    };
+
+    handleMessageSend = (message) => {
+        const {roomConnection} = this.props;
+        roomConnection.sendChatMessage(message);
+    };
+
+    render() {
+        const {roomConnection} = this.props;
+        const {messages} = this.state;
+        return (
+            <React.Fragment>
+                <RoomHeader room={roomConnection ? roomConnection.room : null}
+                            onHistory={this.handleShowHistory}
+                            onLeave={this.handleRoomLeave}
+                            userName={roomConnection ? roomConnection.userName : null}/>
+                {roomConnection && (
                     <Card className="m-3">
                         <Card.Body>
-                            <Card.Title>Card Title</Card.Title>
-                            <Card.Text>
-                                Some quick example text to build on the card title and make up the bulk of
-                                the card's content.
-                            </Card.Text>
-                            <Button variant="primary" block>Go somewhere</Button>
+                            <Messages messages={messages}/>
                         </Card.Body>
+                        <Card.Footer>
+                            <MessageWriter onMessageSend={this.handleMessageSend}/>
+                        </Card.Footer>
                     </Card>
-                </Col>
-            </Row>
-        </React.Fragment>
+                )}
+            </React.Fragment>
 
 
-    );
+        );
+    }
 }
 
-export default Room;
+const mapStateToProps = state => {
+    return {
+        roomConnection: state.roomConnection
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        clearRoomConnection: () => dispatch(clearRoomConnection())
+    }
+};
+
+Room.propTypes = {
+    roomConnection: PropTypes.object
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Room);

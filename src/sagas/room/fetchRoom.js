@@ -6,7 +6,6 @@ export const ROOMS_FETCHED = 'ROOMS_FETCHED';
 
 
 export function* fetchRoomsAsync(value) {
-    console.log('fetchRoomsAsync', value);
     const rooms = yield getRooms();
     yield put({type: ROOMS_FETCHED, payload: rooms.data})
 }

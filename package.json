@@ -6,12 +6,15 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "express": "^4.16.4",
+    "formik": "^1.5.1",
     "react": "^16.8.4",
     "react-bootstrap": "^1.0.0-beta.5",
     "react-dom": "^16.8.4",
+    "react-modal": "^3.8.1",
     "react-redux": "^6.0.1",
     "react-scripts": "2.1.8",
-    "redux-saga": "^1.0.2"
+    "redux-saga": "^1.0.2",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start:cf": "npm run build && node server.js",

@@ -1,12 +1,9 @@
 import {put, takeEvery} from 'redux-saga/effects'
 import {FETCH_ROOMS} from "../../actions/room/fetchRoom";
-import axiosMain from '../../lib/network/axiosMain'
+import getRooms from "../../lib/api/rooms/getRooms";
 
 export const ROOMS_FETCHED = 'ROOMS_FETCHED';
 
-function getRooms() {
-    return axiosMain.get('/api/1/rooms/');
-}
 
 export function* fetchRoomsAsync(value) {
     console.log('fetchRoomsAsync', value);

@@ -27,7 +27,7 @@ function Room() {
                             </Card.Text>
                             <Button variant="primary" block>Go somewhere</Button>
                         </Card.Body>
-                    </Card>;
+                    </Card>
                 </Col>
             </Row>
         </React.Fragment>

@@ -1,7 +1,5 @@
 import {Subject} from 'rxjs'
 
-const CHAT = 'CHAT';
-
 class Connection {
     onMessage = new Subject();
 
@@ -10,6 +8,7 @@ class Connection {
         this.room = room;
         this.userName = userName;
         this.subscribeIncomingMessages();
+        this.joinRoom();
     }
 
     subscribeIncomingMessages() {
@@ -18,15 +17,16 @@ class Connection {
     }
 
     joinRoom() {
-        console.log('JOIN ROOM')
+        this.stompClient.send("/ws-api/add-user", {},
+            JSON.stringify({
+                plainText: this.userName
+            }));
     }
 
     sendChatMessage(chatMessage) {
         this.stompClient.send("/ws-api/message", {},
             JSON.stringify({
-                sender: this.userName,
-                content: chatMessage,
-                type: CHAT
+                plainText: chatMessage
             }));
     }
 
@@ -36,7 +36,7 @@ class Connection {
             date: 'data',
             sender: 'sender',
         })
-    }
+    };
 
     disconnect() {
         this.incomingMessagesSubscription.unsubscribe();

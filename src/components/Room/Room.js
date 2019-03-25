@@ -7,6 +7,10 @@ import RoomHeader from "./RoomHeader/RoomHeader";
 import Messages from "./Messages/Messages";
 import MessageWriter from "./MessageWriter/MessageWriter";
 
+const MESSAGE = 'MESSAGE';
+const INIT = 'INIT';
+const USER_JOINED = 'USER_JOINED';
+
 class Room extends Component {
     constructor(props) {
         super(props);
@@ -26,8 +30,29 @@ class Room extends Component {
     }
 
     onMessageReceived = (message) => {
+        switch (message.type) {
+            case MESSAGE: {
+                this.onSingleMessageReceived(message);
+                break;
+            }
+            default: {
+                console.log('')
+            }
+        }
+
+
+    };
+
+    onSingleMessageReceived = (message) => {
+        const newChatMessage = {
+            text: message.content[0].message,
+            id: message.content[0].id,
+            date: message.content[0].timestamp,
+            sender: message.content[0].authorName,
+        };
+
         this.setState((prevState) => ({
-            messages: [...prevState.messages, message]
+            messages: [...prevState.messages, newChatMessage]
         }))
     };
 

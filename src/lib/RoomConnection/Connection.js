@@ -1,5 +1,7 @@
 import {Subject} from 'rxjs'
 
+
+
 class Connection {
     onMessage = new Subject();
 
@@ -13,29 +15,27 @@ class Connection {
 
     subscribeIncomingMessages() {
         this.incomingMessagesSubscription = this.stompClient
-            .subscribe('/topic/public', this.onMessageReceived);
+            .subscribe(`/topic/room.${this.room.id}`, this.onMessageReceived);
     }
 
     joinRoom() {
-        this.stompClient.send("/ws-api/add-user", {},
+        this.stompClient.send(`/ws-api/topic/room.${this.room.id}.addUser`, {},
             JSON.stringify({
                 plainText: this.userName
             }));
     }
 
     sendChatMessage(chatMessage) {
-        this.stompClient.send("/ws-api/message", {},
+        this.stompClient.send(`/ws-api/topic/room.${this.room.id}.message`, {},
             JSON.stringify({
                 plainText: chatMessage
             }));
     }
 
     onMessageReceived = (payload) => {
-        this.onMessage.next({
-            text: 'text wiadomosci',
-            date: 'data',
-            sender: 'sender',
-        })
+        const parsedMessage = JSON.parse(payload.body);
+        console.log(parsedMessage);
+        this.onMessage.next(parsedMessage)
     };
 
     disconnect() {

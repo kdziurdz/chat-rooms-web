@@ -12,10 +12,6 @@ const schema = yup.object({
 
 
 class CreateRoomModal extends Component {
-
-    createRoom = () => {
-        console.log('createRoom')
-    };
     handleSubmit = (values) => {
         createRoom(values.name, values.password)
             .then(() => {

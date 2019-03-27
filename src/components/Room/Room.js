@@ -1,21 +1,20 @@
 import React, {Component} from 'react';
-import {Card} from "react-bootstrap";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {clearRoomConnection} from "../../actions/room/storeRoomConnection";
 import RoomHeader from "./RoomHeader/RoomHeader";
-import Messages from "./Messages/Messages";
-import MessageWriter from "./MessageWriter/MessageWriter";
-
-const MESSAGE = 'MESSAGE';
-const INIT = 'INIT';
-const USER_JOINED = 'USER_JOINED';
+import Chat from "./Chat/Chat";
+import RoomParticipants from "./RoomParticipants/RoomParticipants";
+import {Col, Row} from "react-bootstrap";
+import messageTypes from "./messageTypes";
+import MessageFactory from "./MessageFactory";
 
 class Room extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            messages: []
+            messages: [],
+            participants: []
         }
     }
 
@@ -30,13 +29,26 @@ class Room extends Component {
     }
 
     onMessageReceived = (message) => {
+        console.log('onMessageReceived', message)
         switch (message.type) {
-            case MESSAGE: {
+            case messageTypes.MESSAGE: {
                 this.onSingleMessageReceived(message);
                 break;
             }
+            case messageTypes.USER_JOINED: {
+                this.onUserJoined(message);
+                break;
+            }
+            case messageTypes.USER_DISCONNECTED: {
+                this.onUserDisconnected(message);
+                break;
+            }
+            case messageTypes.INIT: {
+                this.onInit(message);
+                break;
+            }
             default: {
-                console.log('')
+                console.error('Message type unknown')
             }
         }
 
@@ -44,15 +56,39 @@ class Room extends Component {
     };
 
     onSingleMessageReceived = (message) => {
-        const newChatMessage = {
-            text: message.content[0].message,
-            id: message.content[0].id,
-            date: message.content[0].timestamp,
-            sender: message.content[0].authorName,
-        };
+        this.setState((prevState) => ({
+            messages: [...prevState.messages, MessageFactory.createTextMessage(message.content[0])]
+        }))
+    };
+
+    onUserJoined = (message) => {
+        const {participants} = this.state;
+        const infoMessage = MessageFactory.createInfoMessage(message);
+        const alreadyExist = !!participants.find(participant => participant.username === message.participant.username);
 
         this.setState((prevState) => ({
-            messages: [...prevState.messages, newChatMessage]
+            messages: [...prevState.messages, infoMessage],
+            participants: alreadyExist
+                ? [...prevState.participants]
+                : [...prevState.participants, message.participant]
+        }))
+    };
+
+    onUserDisconnected = (message) => {
+        const infoMessage = MessageFactory.createInfoMessage(message);
+        this.setState((prevState) => ({
+            messages: [...prevState.messages, infoMessage],
+            participants: [...prevState.participants
+                .filter(participant => participant.username !== message.participant.username)]
+        }))
+    };
+
+    onInit = (message) => {
+        this.setState((prevState) => ({
+            messages: [...message.content
+                .map(msg => MessageFactory.createTextMessage(msg)),
+                ...prevState.messages],
+            participants: message.participants
         }))
     };
 
@@ -73,22 +109,23 @@ class Room extends Component {
 
     render() {
         const {roomConnection} = this.props;
-        const {messages} = this.state;
+        const {messages, participants} = this.state;
         return (
             <React.Fragment>
+
                 <RoomHeader room={roomConnection ? roomConnection.room : null}
                             onHistory={this.handleShowHistory}
                             onLeave={this.handleRoomLeave}
                             userName={roomConnection ? roomConnection.userName : null}/>
                 {roomConnection && (
-                    <Card className="m-3">
-                        <Card.Body>
-                            <Messages messages={messages}/>
-                        </Card.Body>
-                        <Card.Footer>
-                            <MessageWriter onMessageSend={this.handleMessageSend}/>
-                        </Card.Footer>
-                    </Card>
+                    <Row>
+                        <Col lg={8} xs={12}>
+                            <Chat messages={messages} onMessageSend={this.handleMessageSend}/>
+                        </Col>
+                        <Col>
+                            <RoomParticipants participants={participants}/>
+                        </Col>
+                    </Row>
                 )}
             </React.Fragment>
 

@@ -9,13 +9,13 @@ class ConnectionFactory {
 
     connect = (room, userName) => {
         return new Promise((resolve, reject) => {
-            const sock = new SockJS('/ws?xxxx=yyyy');
+            const sock = new SockJS('/ws');
             const stompClient = Stomp.over(sock);
-            console.log('bylo over')
             stompClient.connect({'Authorization': token}, (frame) => {
-                console.log('POLACZONY')
-                resolve(new Connection(stompClient, room, userName, token))
-                // console.log('Connected: ' + frame);
+                const urlSegments = sock._transport.url.split("/");
+                const sessionId = urlSegments[urlSegments.length - 2];
+
+                resolve(new Connection(stompClient, room, userName, token, sessionId))
             });
         })
     }

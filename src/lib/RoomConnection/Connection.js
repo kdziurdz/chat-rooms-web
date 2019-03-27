@@ -1,15 +1,16 @@
 import {Subject} from 'rxjs'
-
+import jwtDecode from 'jwt-decode';
 
 
 class Connection {
     onMessage = new Subject();
 
-    constructor(stompClient, room, userName, token) {
+    constructor(stompClient, room, userName, token, sessionId) {
         this.stompClient = stompClient;
         this.room = room;
         this.userName = userName;
         this.token = token;
+        this.subscribeToPersonalMessages();
         this.subscribeIncomingMessages();
         this.joinRoom();
     }
@@ -17,6 +18,11 @@ class Connection {
     subscribeIncomingMessages() {
         this.incomingMessagesSubscription = this.stompClient
             .subscribe(`/topic/room.${this.room.id}`, this.onMessageReceived, {'Authorization': this.token});
+    }
+
+    subscribeToPersonalMessages() {
+        this.personalMessagesSubscription = this.stompClient
+            .subscribe("/user/queue/reply", this.onMessageReceived, {'Authorization': this.token});
     }
 
     joinRoom() {
@@ -35,14 +41,13 @@ class Connection {
 
     onMessageReceived = (payload) => {
         const parsedMessage = JSON.parse(payload.body);
-        console.log(parsedMessage);
         this.onMessage.next(parsedMessage)
     };
 
     disconnect() {
         this.incomingMessagesSubscription.unsubscribe();
+        this.personalMessagesSubscription.unsubscribe();
     }
-
 }
 
 export default Connection;

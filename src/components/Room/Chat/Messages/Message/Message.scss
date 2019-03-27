@@ -1,0 +1,26 @@
+.chc-message {
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+
+  &.chc-outgoing {
+    color: white;
+    background-color: #0084FF;
+    .chc-message-content {
+      text-align: right;
+    }
+  }
+  &.chc-incoming {
+    background-color: #F1F0F0;
+    .chc-message-content {
+      text-align: left;
+    }
+
+  }
+
+  &.chc-info {
+    .chc-message-content {
+      text-align: center;
+    }
+  }
+}

@@ -21,12 +21,12 @@ class RoomCreator extends Component {
     render() {
         const {showCreateModal} = this.state;
         return (
-            <React.Fragment>
+            <div className="mx-3">
                 <Button variant="secondary" onClick={this.openModal} block>Create</Button>
                 {showCreateModal && (
                     <CreateRoomModal onClose={this.closeModal}/>
                 )}
-            </React.Fragment>
+            </div>
         );
     }
 }

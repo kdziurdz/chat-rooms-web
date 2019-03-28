@@ -5,8 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RoomSelector from "./components/RoomSelector/RoomSelector";
 import Room from "./components/Room/Room";
-import Provider from "react-redux/es/components/Provider";
 import store from './store/store'
+import {Provider} from "react-redux";
 
 class App extends Component {
     render() {

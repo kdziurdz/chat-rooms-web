@@ -1,18 +1,7 @@
 import axios from "axios";
+import UrlProvider from "./UrlProvider";
 
-const envMode = process.env.NODE_ENV;
-
-let baseURL;
-
-switch (envMode) {
-    case 'production': {
-        baseURL = 'https://samplespring.cfapps.io';
-        break;
-    }
-    default: {
-        baseURL = 'http://localhost:8080/'
-    }
-}
+const baseURL = UrlProvider.getBaseUrl();
 
 const axiosMain = axios.create({
     baseURL

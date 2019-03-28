@@ -19,7 +19,10 @@ class RoomList extends Component {
     }
 
     handleRoomClicked = (room) => {
-        this.setState({showJoinRoomModal: true, selectedRoom: room});
+        const {roomConnection} = this.props;
+        if (!roomConnection) {
+            this.setState({showJoinRoomModal: true, selectedRoom: room});
+        }
     };
 
     closeModal = () => {
@@ -31,13 +34,14 @@ class RoomList extends Component {
     };
 
     render() {
-        const {rooms} = this.props;
+        const {rooms, roomConnection} = this.props;
         const {showJoinRoomModal, selectedRoom} = this.state;
         return (
             <Card className="m-3">
                 <ListGroup variant="flush">
                     {rooms.map(room => (
                         <ListGroup.Item onClick={() => this.handleRoomClicked(room)}
+                                        active={roomConnection && room.id === roomConnection.room.id}
                                         style={{cursor: 'pointer'}}
                                         key={room.id}>{room.name}
                         </ListGroup.Item>
@@ -56,7 +60,8 @@ class RoomList extends Component {
 
 const mapStateToProps = state => {
     return {
-        rooms: state.rooms
+        rooms: state.rooms,
+        roomConnection: state.roomConnection
     }
 };
 
@@ -67,7 +72,8 @@ const mapDispatchToProps = dispatch => {
 };
 
 RoomList.propTypes = {
-    handleConnectionEstablished: PropTypes.func.isRequired
+    handleConnectionEstablished: PropTypes.func.isRequired,
+    roomConnection: PropTypes.object
 };
 
 export default connect(

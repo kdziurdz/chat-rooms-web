@@ -1,31 +1,44 @@
+import React from 'react';
 import messageTypes from "./messageTypes";
 
 class MessageFactory {
-    createTextMessage(message, actualUsername) {
+    createInfoMessage(message) {
+        const joined = message.type === messageTypes.USER_JOINED;
         return {
-            type: messageTypes.MESSAGE,
-            subtype: actualUsername === message.authorName ? messageTypes.OUTGOING : messageTypes.INCOMING,
+            className: joined ? 'chc-message chc-info chc-user-joined' : 'chc-message chc-info chc-user-disconnected',
+            message: (
+                <span>User
+                      <b>&nbsp;{message.participant.username}&nbsp;</b>
+                    {joined ? 'joined' : 'left room'}
+                    </span>
+            ),
+            timestamp: message.timestamp,
+            authorName: message.authorName,
+        }
+
+    }
+
+    createTextMessage(message, actualUsername) {
+        const result = {
+            className: actualUsername === message.authorName ? 'chc-message chc-outgoing' : 'chc-message chc-incoming',
             message: message.message,
             timestamp: message.timestamp,
             authorName: message.authorName,
-            id: message.id
-        }
+        };
+        return result;
+
     }
 
-    createInfoMessage(message) {
+    create(message, actualUsername) {
         switch (message.type) {
             case messageTypes.USER_JOINED:
             case messageTypes.USER_DISCONNECTED: {
-                return {
-                    type: messageTypes.INFO,
-                    subtype: message.type,
-                    username: message.participant.username,
-                    timestamp: message.timestamp
-                };
+                return this.createInfoMessage(message)
             }
             default: {
-                console.error('Type unknown', message.type);
+                return this.createTextMessage(message, actualUsername)
             }
+
         }
     }
 }

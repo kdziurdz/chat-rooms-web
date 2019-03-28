@@ -13,7 +13,7 @@ const schema = yup.object({
 
 class CreateRoomModal extends Component {
     handleSubmit = (values) => {
-        createRoom(values.name, values.password)
+        createRoom(values.name, values.password || null)
             .then(() => {
                 this.props.onClose();
                 this.props.refreshRooms();

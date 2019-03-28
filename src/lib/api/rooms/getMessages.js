@@ -1,12 +1,12 @@
 import axiosMain from "../../network/axiosMain";
 import urls from "../urls.const";
 
-function getRooms(query = null) {
-    return axiosMain.get(urls.ROOMS, {
+function getMessages(roomId, query = null) {
+    return axiosMain.get(`${urls.ROOMS}${roomId}/messages`, {
         params: {
             query: query || null
         }
     });
 }
 
-export default getRooms
+export default getMessages

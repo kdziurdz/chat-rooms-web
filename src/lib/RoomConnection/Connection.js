@@ -1,11 +1,9 @@
 import {Subject} from 'rxjs'
-import jwtDecode from 'jwt-decode';
-
 
 class Connection {
     onMessage = new Subject();
 
-    constructor(stompClient, room, userName, token, sessionId) {
+    constructor(stompClient, room, userName, token) {
         this.stompClient = stompClient;
         this.room = room;
         this.userName = userName;
@@ -47,6 +45,7 @@ class Connection {
     disconnect() {
         this.incomingMessagesSubscription.unsubscribe();
         this.personalMessagesSubscription.unsubscribe();
+        this.stompClient.disconnect();
     }
 }
 

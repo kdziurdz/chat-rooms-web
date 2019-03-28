@@ -1,17 +1,35 @@
 import React, {Component} from 'react';
-import {Button, Form, FormControl, Navbar} from "react-bootstrap";
+import {Navbar} from "react-bootstrap";
+import {storeRoomQuery} from "../../../actions/room/storeRoomQuery";
+import {fetchRooms} from "../../../actions/room/fetchRoom";
+import {connect} from "react-redux";
+import SearchInline from "../../SearchInline/SearchInline";
 
 class RoomSearch extends Component {
+
+    handleSubmit = (values) => {
+        this.props.storeRoomQuery(values.query);
+        this.props.fetchRooms();
+
+    };
+
     render() {
+
         return (
             <Navbar bg="light">
-                <Form inline>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2"/>
-                    <Button variant="outline-success">Search</Button>
-                </Form>
+                <SearchInline handleSubmit={this.handleSubmit}/>
             </Navbar>
         );
     }
 }
 
-export default RoomSearch;
+const mapDispatchToProps = dispatch => {
+    return {
+        storeRoomQuery: (query) => dispatch(storeRoomQuery(query)),
+        fetchRooms: () => dispatch(fetchRooms())
+    }
+};
+export default connect(
+    null,
+    mapDispatchToProps
+)(RoomSearch);

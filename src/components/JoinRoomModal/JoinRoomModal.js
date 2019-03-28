@@ -4,6 +4,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import PropTypes from "prop-types";
 import ConnectionFactory from "../../lib/RoomConnection/ConnectionFactory";
+import getAuthorizationToken from "../../lib/api/rooms/getAuthorizationToken";
 
 const schema = yup.object({
     name: yup.string().required()
@@ -14,11 +15,15 @@ class JoinRoomModal extends Component {
 
     handleSubmit = (values) => {
         const {room} = this.props;
-        ConnectionFactory.connect(room, values.name)
-            .then((connection) => {
-                this.props.onConnectionEstablished(connection)
+        getAuthorizationToken(room.id, values.name, values.password || null)
+            .then(({data}) => {
+                ConnectionFactory.connect(room, values.name, data.token)
+                    .then((connection) => {
+                        this.props.onConnectionEstablished(connection)
+                    });
             });
     };
+
 
     render() {
         const {onClose, room} = this.props;

@@ -8,13 +8,15 @@ import RoomParticipants from "./RoomParticipants/RoomParticipants";
 import {Col, Row} from "react-bootstrap";
 import messageTypes from "./messageTypes";
 import MessageFactory from "./MessageFactory";
+import MessageHistoryModal from "../MessageHistoryModal/MessageHistoryModal";
 
 class Room extends Component {
     constructor(props) {
         super(props);
         this.state = {
             messages: [],
-            participants: []
+            participants: [],
+            showHistoryModal: false
         }
     }
 
@@ -29,7 +31,7 @@ class Room extends Component {
     }
 
     onMessageReceived = (message) => {
-        console.log('onMessageReceived', message)
+        console.log('onMessageReceived', message);
         switch (message.type) {
             case messageTypes.MESSAGE: {
                 this.onSingleMessageReceived(message);
@@ -57,13 +59,13 @@ class Room extends Component {
 
     onSingleMessageReceived = (message) => {
         this.setState((prevState) => ({
-            messages: [...prevState.messages, MessageFactory.createTextMessage(message.content[0])]
+            messages: [...prevState.messages, MessageFactory.create(message.content[0])]
         }))
     };
 
     onUserJoined = (message) => {
         const {participants} = this.state;
-        const infoMessage = MessageFactory.createInfoMessage(message);
+        const infoMessage = MessageFactory.create(message);
         const alreadyExist = !!participants.find(participant => participant.username === message.participant.username);
 
         this.setState((prevState) => ({
@@ -75,7 +77,7 @@ class Room extends Component {
     };
 
     onUserDisconnected = (message) => {
-        const infoMessage = MessageFactory.createInfoMessage(message);
+        const infoMessage = MessageFactory.create(message);
         this.setState((prevState) => ({
             messages: [...prevState.messages, infoMessage],
             participants: [...prevState.participants
@@ -84,9 +86,12 @@ class Room extends Component {
     };
 
     onInit = (message) => {
+        const mappedMessages = [];
+
         this.setState((prevState) => ({
+
             messages: [...message.content
-                .map(msg => MessageFactory.createTextMessage(msg)),
+                .map(msg => MessageFactory.create(msg)),
                 ...prevState.messages],
             participants: message.participants
         }))
@@ -99,7 +104,11 @@ class Room extends Component {
         clearRoomConnection();
     };
     handleShowHistory = () => {
-        console.log('handleShowHistory')
+        this.setState({showHistoryModal: true})
+    };
+
+    closeHistory = () => {
+        this.setState({showHistoryModal: false})
     };
 
     handleMessageSend = (message) => {
@@ -109,7 +118,7 @@ class Room extends Component {
 
     render() {
         const {roomConnection} = this.props;
-        const {messages, participants} = this.state;
+        const {messages, participants, showHistoryModal} = this.state;
         return (
             <React.Fragment>
 
@@ -126,6 +135,9 @@ class Room extends Component {
                             <RoomParticipants participants={participants}/>
                         </Col>
                     </Row>
+                )}
+                {showHistoryModal && (
+                    <MessageHistoryModal room={roomConnection.room} onClose={this.closeHistory}/>
                 )}
             </React.Fragment>
 
